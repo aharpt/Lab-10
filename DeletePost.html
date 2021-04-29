@@ -1,0 +1,44 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <form action="./DeletePost.php" method="post">
+        <table>
+            <?php
+            $mysqli = new mysqli("mysql.eecs.ku.edu", "aaronharpt", "Vee3Cie9",
+            "aaronharpt");
+            /* check connection */
+            if ($mysqli->connect_errno) {
+            printf("Connect failed: %s\n", $mysqli->connect_error);
+            exit();
+            }
+            $query = "SELECT author_id, content FROM Posts";
+            if ($result = $mysqli->query($query)) {
+            /* fetch associative array */
+            while ($row = $result->fetch_assoc()) {
+            echo "
+            <tr>
+                ";
+                echo "
+                <td>" . $row["author_id"] . "</td>";
+                echo "
+                <td>" . $row["content"] . "</td>";
+                echo "
+                <td>Delete? <input type='checkbox' name='delete[]' value='" . $row["content"] . "' /></td>";
+                echo "
+            </tr>";
+            }
+
+            /* free result set */
+            $result->free();
+            }
+
+            /* close connection */
+            $mysqli->close();
+            ?>
+        </table>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
